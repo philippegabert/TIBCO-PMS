@@ -2,7 +2,7 @@ package rpicamera
 
 import (
 	"encoding/base64"
-	"fmt"
+//	"fmt"
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/dhowden/raspicam"
