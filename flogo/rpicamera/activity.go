@@ -90,9 +90,9 @@ func (a *RPICamera) Eval(context activity.Context) (done bool, err error) {
 	log.Debug("Capturing image...")
 	raspicam.Capture(s, img, errCh)
 
-	if errCh != nil {
+	/*if errCh != nil {
 		return false, fmt.Errorf("error while capture picture... Please see logs.")
-	}
+	}*/
 
 	context.SetOutput(ovPath, targetFile)
 	log.Debugf("Output variable picFile set to [%s]", targetFile)
