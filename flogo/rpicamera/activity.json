@@ -5,8 +5,8 @@
 	"type": "flogo:activity",
 	"description": "This activity allows you to capture image from Raspberry Pi camera.",
 	"author": "Philippe GABERT <pgabert@tibco.com>",
-	"ref": "github.com/philippegabert/flogo-contrib/activity/rpicamera",
-	"homepage": "https://github.com/philippegabert/flogo-contrib/tree/rpicamera/activity/rpicamera",
+	"ref": "github.com/philippegabert/TIBCO-PMS/flogo/rpicamera",
+	"homepage": "https://github.com/philippegabert/TIBCO-PMS/tree/master/flogo/rpicamera",
 	"inputs": [
 
 		{
