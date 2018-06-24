@@ -53,7 +53,7 @@ func (a *RPICamera) Eval(context activity.Context) (done bool, err error) {
 	picHeight := context.GetInput(ivHeight).(int)
 	flipH := context.GetInput(ivFlipH).(bool)
 	flipV := context.GetInput(ivFlipV).(bool)
-	brightness, _ := strconv.Atoi(ivBrightness)
+	brightness := context.GetInput(ivBrightness).(int)
 	outputBase64 := context.GetInput(ivOutputBase64).(bool)
 	targetFile := context.GetInput(ivFolderOut).(string)
 
