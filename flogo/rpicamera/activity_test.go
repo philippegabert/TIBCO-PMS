@@ -1,45 +1,55 @@
-{
-  "name": "rpicamera",
-  "title": "Capture image from Raspberry Pi Camera",
-  "version": "0.0.1",
-  "type": "flogo:activity",
-  "description": "This activity allows you to capture image from Raspberry Pi camera.",
-  "author": "Philippe GABERT <pgabert@tibco.com>",
-  "ref": "github.com/philippegabert/flogo-contrib/activity/rpicamera",
-  "homepage": "https://github.com/philippegabert/flogo-contrib/tree/rpicamera/activity/rpicamera",
-  "inputs":[
-    {
-      "name": "deviceID",
-      "type": "integer",
-	  "required":"true"
-    },
-	{
-      "name": "picWidth",
-      "type": "integer"
-    },
-	{
-      "name": "picHeight",
-      "type": "integer"
-    },
-	{
-      "name": "outputType",
-      "type": "string",
-	  "allowed" : ["file","base64"],
-	  "value": "file"
-    },
-	{
-      "name": "folderOut",
-      "type": "string"
-    }
-  ],
-  "outputs": [
-   	{
-      "name": "picFile",
-      "type": "string"
-    },
-	{
-      "name": "base64",
-      "type": "string"
-    }
-  ]
+package rpicamera
+
+import (
+	"io/ioutil"
+	"testing"
+
+	"github.com/TIBCOSoftware/flogo-lib/core/activity"
+	"github.com/TIBCOSoftware/flogo-contrib/action/flow/test"
+)
+
+var activityMetadata *activity.Metadata
+
+func getActivityMetadata() *activity.Metadata {
+
+	if activityMetadata == nil {
+		jsonMetadataBytes, err := ioutil.ReadFile("activity.json")
+		if err != nil{
+			panic("No Json Metadata found for activity.json path")
+		}
+
+		activityMetadata = activity.NewMetadata(string(jsonMetadataBytes))
+	}
+
+	return activityMetadata
+}
+
+func TestCreate(t *testing.T) {
+
+	act := NewActivity(getActivityMetadata())
+
+	if act == nil {
+		t.Error("Activity Not Created")
+		t.Fail()
+		return
+	}
+}
+
+func TestEval(t *testing.T) {
+
+	defer func() {
+		if r := recover(); r != nil {
+			t.Failed()
+			t.Errorf("panic during execution: %v", r)
+		}
+	}()
+
+	act := NewActivity(getActivityMetadata())
+	tc := test.NewTestActivityContext(getActivityMetadata())
+
+	//setup attrs
+
+	act.Eval(tc)
+
+	//check result attr
 }
