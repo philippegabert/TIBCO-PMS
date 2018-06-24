@@ -57,11 +57,11 @@ func (a *RPICamera) Eval(context activity.Context) (done bool, err error) {
 	outputBase64 := context.GetInput(ivOutputBase64).(bool)
 	targetFile := context.GetInput(ivFolderOut).(string)
 
-	log.Debugf("Input defined: [picWidth = %d], [picHeight = %d], [flipH = %b], [flipV = %b], [brightness = %d], [targetFile = %s], [outputBase64 = %b]", picWidth, picHeight, flipH, flipV, brightness, targetFile, outputBase64)
+	log.Debugf("Input defined: [picWidth = %d], [picHeight = %d], [flipH = %t], [flipV = %t], [brightness = %d], [targetFile = %s], [outputBase64 = %t]", picWidth, picHeight, flipH, flipV, brightness, targetFile, outputBase64)
 
 	fileName := time.Now().Format("20060102150405")
 
-	targetFile = filepath.Join(targetFile, fileName, ".jpg")
+	targetFile = filepath.Join(targetFile, fileName + ".jpg")
 	log.Debugf("Picture will be saved to [%s]", targetFile)
 
 	img, err := os.Create(targetFile)
