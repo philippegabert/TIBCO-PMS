@@ -1,0 +1,58 @@
+{
+	"name": "rpicamera",
+	"title": "Capture image from Raspberry Pi Camera",
+	"version": "0.0.1",
+	"type": "flogo:activity",
+	"description": "This activity allows you to capture image from Raspberry Pi camera.",
+	"author": "Philippe GABERT <pgabert@tibco.com>",
+	"ref": "github.com/philippegabert/flogo-contrib/activity/rpicamera",
+	"homepage": "https://github.com/philippegabert/flogo-contrib/tree/rpicamera/activity/rpicamera",
+	"inputs": [
+
+		{
+			"name": "picWidth",
+			"type": "integer",
+			"value": 2592
+		},
+		{
+			"name": "picHeight",
+			"type": "integer",
+			"value": 1944
+		},
+		{
+			"name": "HFlip",
+			"type": "boolean",
+			"value": "false"
+		},
+		{
+			"name": "VFlip",
+			"type": "boolean",
+			"value": "false"
+		},
+		{
+			"name": "Brightness",
+			"type": "integer",
+			"value": 0
+		},
+
+
+		{
+			"name": "folderOut",
+			"type": "string"
+		},
+    {
+			"name": "outputBase64",
+			"type": "boolean",
+			"value": "false"
+		}
+	],
+	"outputs": [{
+			"name": "picFile",
+			"type": "string"
+		},
+		{
+			"name": "base64",
+			"type": "string"
+		}
+	]
+}
