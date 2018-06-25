@@ -18,10 +18,10 @@ import (
 var log = logger.GetLogger("trigger-hc-sr04-rpi")
 
 var (
-	pin_send2 rpio.Pin = rpio.Pin(2)
-	pin_recv3 rpio.Pin = rpio.Pin(3)
+	pin_trig rpio.Pin = rpio.Pin(23)
+	pin_echo rpio.Pin = rpio.Pin(18)
 )
-var interval = 2000
+var interval = 1000
 
 
 // HCSR04TriggerFactory My Trigger factory
@@ -58,8 +58,8 @@ func (t *HCSR04Trigger) Init(runner action.Runner) {
 		os.Exit(1)
 	}
 	defer rpio.Close()
-	pin_send2.Output()
-	pin_recv3.Input()
+	pin_trig.Output()
+	pin_echo.Input()
 
 	time.Sleep(time.Second * 2)
 
@@ -136,31 +136,29 @@ func (t *HCSR04Trigger) scheduleRepeating(endpoint *trigger.HandlerConfig) {
 }
 
 func (t *HCSR04Trigger) checkDistance(endpoint *trigger.HandlerConfig) (distance float64, err error) {
-	pin_send2.Low()
+	pin_trig.Low()
 	time.Sleep(time.Microsecond * 30)
-	pin_send2.High()
+	pin_trig.High()
 	time.Sleep(time.Microsecond * 30)
-	pin_send2.Low()
+	pin_trig.Low()
 	time.Sleep(time.Microsecond * 30)
 	for {
-		status := pin_recv3.Read()
+		status := pin_echo.Read()
 		if status == rpio.High {
 			break
 		}
 	}
 	begin := time.Now()
 	for {
-		status := pin_recv3.Read()
+		status := pin_echo.Read()
 		if status == rpio.Low {
 			break
 		}
 	}
 	end := time.Now()
 	diff := end.Sub(begin)
-	//fmt.Println("diff = ",diff.Nanoseconds(),diff.Seconds(),diff.String()) 1496548629.307,501,127
 	result_sec := float64(diff.Nanoseconds()) / 1000000000.0
-	//fmt.Println("begin = ", begin.UnixNano(), " end = ", end.UnixNano(), "diff = ", result_sec, diff.Nanoseconds())
-	return result_sec * 340.0 / 2, nil
+	return result_sec * 17150, nil
 }
 
 // Stop implements trigger.Trigger.Start
