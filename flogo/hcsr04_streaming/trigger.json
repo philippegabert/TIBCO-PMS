@@ -1,0 +1,23 @@
+{
+  "name": "hcsr04_streaming",
+  "title": "Stream data from HC-SR04 distance sensor",
+  "version": "0.0.1",
+  "type": "flogo:trigger",
+  "description": "Stream data from HC-SR04 distance sensor",
+	"author": "Philippe GABERT <pgabert@tibco.com>",
+	"ref": "github.com/philippegabert/TIBCO-PMS/flogo/hcsr04_streaming",
+	"homepage": "https://github.com/philippegabert/TIBCO-PMS/tree/master/flogo/hcsr04_streaming",
+  "settings":[
+    {
+      "name": "delay_ms",
+      "type": "int",
+      "value": 2000
+    }
+  ],
+  "outputs": [
+    {
+      "name": "distance",
+      "type": "number"
+    }
+  ]
+}
