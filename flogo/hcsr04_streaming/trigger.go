@@ -17,25 +17,25 @@ import (
 // log is the default package logger
 var log = logger.GetLogger("trigger-hc-sr04-rpi")
 
+var interval = 1000
+
 var (
 	pin_trig rpio.Pin = rpio.Pin(23)
 	pin_echo rpio.Pin = rpio.Pin(18)
 )
-var interval = 1000
 
-
-// HCSR04TriggerFactory My Trigger factory
-type HCSR04TriggerFactory struct {
+// HCSR04Factory My Trigger factory
+type HCSR04Factory struct {
 	metadata *trigger.Metadata
 }
 
 //NewFactory create a new Trigger factory
 func NewFactory(md *trigger.Metadata) trigger.Factory {
-	return &HCSR04TriggerFactory{metadata: md}
+	return &HCSR04Factory{metadata: md}
 }
 
 //New Creates a new trigger instance for a given id
-func (t *HCSR04TriggerFactory) New(config *trigger.Config) trigger.Trigger {
+func (t *HCSR04Factory) New(config *trigger.Config) trigger.Trigger {
 	return &HCSR04Trigger{metadata: t.metadata, config: config}
 }
 
@@ -46,10 +46,25 @@ type HCSR04Trigger struct {
 	config   *trigger.Config
 }
 
+func doEvery(d time.Duration, f func()) {
+	for _ = range time.Tick(d) {
+		f()
+	}
+}
+
 // Init implements trigger.Trigger.Init
 func (t *HCSR04Trigger) Init(runner action.Runner) {
 	t.runner = runner
 
+	if t.config.Settings == nil {
+		log.Info("No configuration set for the trigger... Using default configuration...")
+	} else {
+		if t.config.Settings["delay_ms"] != nil && t.config.Settings["delay_ms"] != "" {
+			interval, _ = strconv.Atoi(t.config.GetSetting("delay_ms"))
+		} else {
+			log.Infof("No delay has been set. Using default value (", interval, "ms)")
+		}
+	}
 	log.Info("Opening GPIO connection...")
 	err := rpio.Open()
 	if err != nil {
@@ -62,16 +77,6 @@ func (t *HCSR04Trigger) Init(runner action.Runner) {
 	pin_echo.Input()
 
 	time.Sleep(time.Second * 2)
-
-	if t.config.Settings == nil {
-		log.Info("No configuration set for the trigger... Using default configuration...")
-	} else {
-		if t.config.Settings["delay_ms"] != nil && t.config.Settings["delay_ms"] != "" {
-			interval, _ = strconv.Atoi(t.config.GetSetting("delay_ms"))
-		} else {
-			log.Infof("No delay has been set. Using default value (", interval, "ms)")
-		}
-	}
 
 }
 
@@ -94,10 +99,10 @@ func (t *HCSR04Trigger) Start() error {
 	return nil
 }
 
-func doEvery(d time.Duration, f func()) {
-	for _ = range time.Tick(d) {
-		f()
-	}
+// Stop implements trigger.Trigger.Start
+func (t *HCSR04Trigger) Stop() error {
+	// stop the trigger
+	return nil
 }
 
 func (t *HCSR04Trigger) scheduleRepeating(endpoint *trigger.HandlerConfig) {
@@ -159,10 +164,4 @@ func (t *HCSR04Trigger) checkDistance(endpoint *trigger.HandlerConfig) (distance
 	diff := end.Sub(begin)
 	result_sec := float64(diff.Nanoseconds()) / 1000000000.0
 	return result_sec * 17150, nil
-}
-
-// Stop implements trigger.Trigger.Start
-func (t *HCSR04Trigger) Stop() error {
-	// stop the trigger
-	return nil
 }
