@@ -143,7 +143,7 @@ func (t *HCSR04Trigger) scheduleRepeating(endpoint *trigger.HandlerConfig) {
 func (t *HCSR04Trigger) checkDistance(endpoint *trigger.HandlerConfig) (distance float64, err error) {
 
 	log.Info("Reopening gpio")
-	err := rpio.Open()
+	err = rpio.Open()
 	if err != nil {
 		fmt.Println(err)
 		log.Errorf("An error occured while opening GPIO port. [%s]. Exiting.", err)
