@@ -73,8 +73,6 @@ func (t *HCSR04Trigger) Init(runner action.Runner) {
 		os.Exit(1)
 	}
 	defer rpio.Close()
-	pin_trig.Output()
-	pin_echo.Input()
 
 	time.Sleep(time.Second * 2)
 
@@ -141,8 +139,6 @@ func (t *HCSR04Trigger) scheduleRepeating(endpoint *trigger.HandlerConfig) {
 }
 
 func (t *HCSR04Trigger) checkDistance(endpoint *trigger.HandlerConfig) (distance float64, err error) {
-
-	log.Info("Reopening gpio")
 	err = rpio.Open()
 	if err != nil {
 		fmt.Println(err)
@@ -152,7 +148,6 @@ func (t *HCSR04Trigger) checkDistance(endpoint *trigger.HandlerConfig) (distance
 	defer rpio.Close()
 	pin_trig.Output()
 	pin_echo.Input()
-
 
 	pin_trig.Low()
 	time.Sleep(time.Microsecond * 30)
@@ -165,7 +160,6 @@ log.Info("So far so good.")
 	for {
 		status := pin_echo.Read()
 		if status == rpio.High {
-			log.Info("Stop because of status pin echo")
 			break
 		}
 	}
@@ -173,7 +167,6 @@ log.Info("So far so good.")
 	for {
 		status := pin_echo.Read()
 		if status == rpio.Low {
-			log.Info("Stop because of status pin echo 2")
 			break
 		}
 	}
