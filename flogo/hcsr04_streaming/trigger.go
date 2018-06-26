@@ -156,7 +156,6 @@ func (t *HCSR04Trigger) checkDistance(endpoint *trigger.HandlerConfig) (distance
 	pin_trig.Low()
 	time.Sleep(time.Microsecond * 30)
 
-log.Info("So far so good.")
 	for {
 		status := pin_echo.Read()
 		if status == rpio.High {
@@ -172,6 +171,8 @@ log.Info("So far so good.")
 	}
 	end := time.Now()
 	diff := end.Sub(begin)
+	log.Infof("diff [%s]", diff)
 	result_sec := float64(diff.Nanoseconds()) / 1000000000.0
+	log.Infof("Distance [%s]", result_sec)
 	return result_sec * 17150, nil
 }
