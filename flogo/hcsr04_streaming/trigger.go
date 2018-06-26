@@ -143,7 +143,7 @@ func (t *HCSR04Trigger) checkDistance(endpoint *trigger.HandlerConfig) (distance
 	if err != nil {
 		fmt.Println(err)
 		log.Errorf("An error occured while opening GPIO port. [%s]. Exiting.", err)
-		os.Exit(1)
+		return -1, err
 	}
 	defer rpio.Close()
 	pin_trig.Output()
@@ -171,8 +171,8 @@ func (t *HCSR04Trigger) checkDistance(endpoint *trigger.HandlerConfig) (distance
 	}
 	end := time.Now()
 	diff := end.Sub(begin)
-	log.Infof("diff [%s]", diff)
+	log.Debugf("diff [%s]", diff)
 	result_sec := float64(diff.Nanoseconds()) / 1000000000.0
-	log.Infof("Distance [%s]", result_sec)
+	log.Debugf("Distance [%s]", result_sec * 17150)
 	return result_sec * 17150, nil
 }
