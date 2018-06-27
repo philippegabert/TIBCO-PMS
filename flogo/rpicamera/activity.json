@@ -34,8 +34,11 @@
 			"type": "integer",
 			"value": 50
 		},
-
-
+		{
+			"name": "Quality",
+			"type": "integer",
+			"value": 50
+		},
 		{
 			"name": "folderOut",
 			"type": "string"

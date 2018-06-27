@@ -2,14 +2,14 @@ package rpicamera
 
 import (
 	"encoding/base64"
-//	"fmt"
+	//	"fmt"
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/dhowden/raspicam"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-//	"strconv"
+	//	"strconv"
 	"time"
 )
 
@@ -22,6 +22,7 @@ const (
 	ivFlipH        = "HFlip"
 	ivFlipV        = "VFlip"
 	ivBrightness   = "Brightness"
+	ivQuality      = "Quality"
 	ivFolderOut    = "folderOut"
 	ivOutputBase64 = "outputBase64"
 	ovPath         = "picFile"
@@ -54,14 +55,15 @@ func (a *RPICamera) Eval(context activity.Context) (done bool, err error) {
 	flipH := context.GetInput(ivFlipH).(bool)
 	flipV := context.GetInput(ivFlipV).(bool)
 	brightness := context.GetInput(ivBrightness).(int)
+	quality := context.GetInput(ivQuality).(int)
 	outputBase64 := context.GetInput(ivOutputBase64).(bool)
 	targetFile := context.GetInput(ivFolderOut).(string)
 
-	log.Debugf("Input defined: [picWidth = %d], [picHeight = %d], [flipH = %t], [flipV = %t], [brightness = %d], [targetFile = %s], [outputBase64 = %t]", picWidth, picHeight, flipH, flipV, brightness, targetFile, outputBase64)
+	log.Debugf("Input defined: [picWidth = %d], [picHeight = %d], [flipH = %t], [flipV = %t], [brightness = %d], [quality = %d], [targetFile = %s], [outputBase64 = %t]", picWidth, picHeight, flipH, flipV, brightness, quality, targetFile, outputBase64)
 
 	fileName := time.Now().Format("20060102150405")
 
-	targetFile = filepath.Join(targetFile, fileName + ".jpg")
+	targetFile = filepath.Join(targetFile, fileName+".jpg")
 	log.Debugf("Picture will be saved to [%s]", targetFile)
 
 	img, err := os.Create(targetFile)
@@ -79,6 +81,7 @@ func (a *RPICamera) Eval(context activity.Context) (done bool, err error) {
 	s.BaseStill.Camera.Brightness = brightness
 	s.BaseStill.Camera.HFlip = flipH
 	s.BaseStill.Camera.VFlip = flipV
+	s.Quality = quality
 
 	errCh := make(chan error)
 	go func() {
